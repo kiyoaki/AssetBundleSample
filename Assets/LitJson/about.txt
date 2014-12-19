@@ -1,0 +1,10 @@
+http://lbv.github.io/litjson/
+
+LitJSON
+JSON library for the .Net framework
+
+Introduction
+LitJSON is a small and fast library for handling data in the JSON format. It is written in C# and is compatible with all .Net languages.
+
+License
+This library and its documentation are dedicated to the public domain. It may be used by anyone, for any purpose, without restrictions.
