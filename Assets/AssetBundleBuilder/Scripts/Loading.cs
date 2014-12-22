@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets.AssetBundleBuilder
 {
-    public class Loading : SingletonMonoBehaviour<Loading>
+    public class Loading : MonoBehaviour
     {
         public float ZoomSpeed;
         public float RotateSpeed;

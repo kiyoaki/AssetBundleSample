@@ -8,6 +8,8 @@ namespace Assets.AssetBundleBuilder
 {
     public class AssetBundleDownloader : MonoBehaviour
     {
+        public Loading Loading;
+
         private static Dictionary<string, float> _progressCounter = new Dictionary<string, float>();
 
         private const string PlayerPrefsKey = "AssetBundleVersion";
@@ -101,9 +103,9 @@ namespace Assets.AssetBundleBuilder
 
             if (_isDownloading.Value)
             {
-                if (!Loading.Instance.IsShowing())
+                if (!Loading.IsShowing())
                 {
-                    Loading.Instance.Show();
+                    Loading.Show();
                 }
 
                 var downloadPercentage = _progressCounter.Values.Sum() / _progressCounter.Count;
@@ -111,7 +113,7 @@ namespace Assets.AssetBundleBuilder
 
                 if (Math.Abs(_progressCounter.Values.Sum() - _progressCounter.Count) <= float.Epsilon)
                 {
-                    Loading.Instance.Hide();
+                    Loading.Hide();
                     Debug.Log("ダウンロード完了");
                     _isDownloading = false;
                     PlayerPrefs.SetString(PlayerPrefsKey, _serializer.Serialize(_newVersionList));
