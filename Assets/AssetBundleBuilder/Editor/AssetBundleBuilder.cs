@@ -171,6 +171,7 @@ namespace Assets.AssetBundleBuilder
 
         private static void WriteFile(string path, string content)
         {
+            CheckExistsAndCreateFolder(path);
             File.WriteAllText(path, content);
         }
 
