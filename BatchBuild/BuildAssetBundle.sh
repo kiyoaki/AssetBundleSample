@@ -2,7 +2,7 @@
 
 UNITY_APP_PATH="/Applications/Unity/Unity.app/Contents/MacOS/Unity"
 TARGET_PROJECT_PATH="/XXX/jenkins/jobs/AssetBundle/workspace"
-BUILD_METHOD="AssetBundleBuilder.ExportAssetBundle"
+BUILD_METHOD="Assets.AssetBundleBuilder.AssetBundleBuilder.ExportAssetBundle"
 
 UPLOAD_TARGET_DIR="$TARGET_PROJECT_PATH/Updated"
 UPLOAD_TARGET_FILE_EXTENSION=".unity3d"
