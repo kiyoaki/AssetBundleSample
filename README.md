@@ -3,18 +3,15 @@ AssetBundleBuilder
 AssetBundleBuilderはUnity3DのAssetBundleを作成して、そのバージョンとCRCを管理するためのライブラリです。
 
 ## Unityのバージョン
-
-Unity 5 beta 14
+5.0.0f4
 
 ## ビルド方法
 
-- Unityエディタのメニューから「Build」→「Export AssetBundle」を実行する
+- Unityエディタのメニューから「AssetBundles」→「Build AssetBundles」を実行する
 - [BatchBuild/BuildAssetBundle.sh](https://github.com/kiyoaki/AssetBundleBuilder/blob/master/BatchBuild/BuildAssetBundle.sh)を実行する
 
-ExportフォルダにビルドされたAssetBundleが配置され、そのビルドで追加または変更されたAssetBundleはUpdatedフォルダにコピーされます。
+## AssetBundleの読み込み先URL設定
 
-## 設定の確認と変更
+- Unityのメニューから「Edit」→「Show AssetBundle Build Settings」を実行する
 
-- Unityエディタのメニューから「Edit」→「Show AssetBundle Build Settings」を実行する
-
-UnityエディタのInspectorで値を変更すると設定が反映されます。
+Inspectorで値を変更すると設定が反映されます。
