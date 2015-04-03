@@ -1,6 +1,6 @@
 AssetBundleBuilder
 ==================
-AssetBundleBuilderはUnity3DのAssetBundleを作成して、そのバージョンとCRCを管理するためのライブラリです。
+AssetBundleBuilderはUnity3DのAssetBundleを作成するためのライブラリです。
 
 ## Unityのバージョン
 5.0.0f4
