@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 3a5e81c889523904e860d5e5b029c04c
+timeCreated: 1427365183
+licenseType: Pro
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 2
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 1
+    quality: .899999976
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: bgm_01
+  assetBundleVariant: 
