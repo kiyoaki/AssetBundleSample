@@ -3,91 +3,88 @@
 using UnityEditor;
 #endif
 
-public static class AssetBundleUtil
+namespace Assets.Scripts.AssetBundles
 {
-    private static string _platformBaseUrl;
-
-    public static string PlatformBaseUrl
+    public static class AssetBundleUtil
     {
-        get
-        {
-            if (!string.IsNullOrEmpty(_platformBaseUrl)) return _platformBaseUrl;
-
-            var buildSettings = Resources.Load<AssetBundleClientSettings>("AssetBundleClientSettings");
-            if (buildSettings == null || string.IsNullOrEmpty(buildSettings.BaseUrl))
-            {
-                Debug.LogError("AssetBundleClientSettings BaseUrl is required.");
-                return "";
-            }
-
-            _platformBaseUrl = buildSettings.BaseUrl.EndsWith("/") ?
-                string.Format(buildSettings.BaseUrl + PlatformFolderForAssetBundles) :
-                string.Format(buildSettings.BaseUrl + "/" + PlatformFolderForAssetBundles);
-
-            return _platformBaseUrl;
-        }
-    }
-
-    private static string _platformFolderForAssetBundles;
-
-    public static string PlatformFolderForAssetBundles
-    {
-        get
-        {
-            if (!string.IsNullOrEmpty(_platformFolderForAssetBundles)) return _platformFolderForAssetBundles;
 #if UNITY_EDITOR
-            _platformFolderForAssetBundles =
-                GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);
+        public static string GetPlatformFolderForAssetBundles(BuildTarget target)
+        {
+            switch (target)
+            {
+                case BuildTarget.Android:
+                    return "Android";
+                case BuildTarget.iOS:
+                    return "iOS";
+                case BuildTarget.WebPlayer:
+                    return "WebPlayer";
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                    return "Windows";
+                case BuildTarget.StandaloneOSXIntel:
+                case BuildTarget.StandaloneOSXIntel64:
+                case BuildTarget.StandaloneOSXUniversal:
+                    return "OSX";
+                // Add more build targets for your own.
+                // If you add more targets, don't forget to add the same platforms to GetPlatformFolderForAssetBundles(RuntimePlatform) function.
+                default:
+                    return null;
+            }
+        }
+#endif
+
+        private static string _platformBaseUrl;
+
+        public static string PlatformBaseUrl
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_platformBaseUrl))
+                {
+                    return _platformBaseUrl;
+                }
+                _platformBaseUrl = AssetBundleClientSettings.BuildAssetBundleUrl(PlatformFolderForAssetBundles);
+                return _platformBaseUrl;
+            }
+        }
+
+        private static string _platformFolderForAssetBundles;
+
+        public static string PlatformFolderForAssetBundles
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_platformFolderForAssetBundles)) return _platformFolderForAssetBundles;
+#if UNITY_EDITOR
+                _platformFolderForAssetBundles =
+                    GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);
 #else
                 _platformFolderForAssetBundles = GetPlatformFolderForAssetBundles(Application.platform);
 #endif
-            return _platformFolderForAssetBundles;
+                return _platformFolderForAssetBundles;
+            }
         }
-    }
 
-    public static string GetPlatformFolderForAssetBundles(RuntimePlatform platform)
-    {
-        switch (platform)
+        public static string GetPlatformFolderForAssetBundles(RuntimePlatform platform)
         {
-            case RuntimePlatform.Android:
-                return "Android";
-            case RuntimePlatform.IPhonePlayer:
-                return "iOS";
-            case RuntimePlatform.WindowsWebPlayer:
-            case RuntimePlatform.OSXWebPlayer:
-                return "WebPlayer";
-            case RuntimePlatform.WindowsPlayer:
-                return "Windows";
-            case RuntimePlatform.OSXPlayer:
-                return "OSX";
-            // Add more build platform for your own.
-            // If you add more platforms, don't forget to add the same targets to GetPlatformFolderForAssetBundles(BuildTarget) function.
-            default:
-                return null;
+            switch (platform)
+            {
+                case RuntimePlatform.Android:
+                    return "Android";
+                case RuntimePlatform.IPhonePlayer:
+                    return "iOS";
+                case RuntimePlatform.WindowsWebPlayer:
+                case RuntimePlatform.OSXWebPlayer:
+                    return "WebPlayer";
+                case RuntimePlatform.WindowsPlayer:
+                    return "Windows";
+                case RuntimePlatform.OSXPlayer:
+                    return "OSX";
+                // Add more build platform for your own.
+                // If you add more platforms, don't forget to add the same targets to GetPlatformFolderForAssetBundles(BuildTarget) function.
+                default:
+                    return null;
+            }
         }
     }
-
-#if UNITY_EDITOR
-    public static string GetPlatformFolderForAssetBundles(BuildTarget target)
-    {
-        switch (target)
-        {
-            case BuildTarget.Android:
-                return "Android";
-            case BuildTarget.iOS:
-                return "iOS";
-            case BuildTarget.WebPlayer:
-                return "WebPlayer";
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return "Windows";
-            case BuildTarget.StandaloneOSXIntel:
-            case BuildTarget.StandaloneOSXIntel64:
-            case BuildTarget.StandaloneOSXUniversal:
-                return "OSX";
-            default:
-                return null;
-        }
-    }
-#endif
 }

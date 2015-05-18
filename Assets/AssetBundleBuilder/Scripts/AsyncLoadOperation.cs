@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.AssetBundles
 {
-    public abstract class AssetBundleLoadOperation : IEnumerator
+    public abstract class AsyncLoadOperation : IEnumerator
     {
         public object Current
         {
@@ -28,9 +28,11 @@ namespace Assets.Scripts.AssetBundles
         abstract public bool IsDone();
 
         abstract public float GetProgress();
+
+        abstract public string GetError();
     }
 
-    public class AssetBundleLoadLevelSimulationOperation : AssetBundleLoadOperation
+    public class AssetBundleLoadLevelSimulationOperation : AsyncLoadOperation
     {
         public override bool Update()
         {
@@ -46,9 +48,14 @@ namespace Assets.Scripts.AssetBundles
         {
             return 1f;
         }
+
+        public override string GetError()
+        {
+            return "";
+        }
     }
 
-    public class AssetBundleLoadLevelOperation : AssetBundleLoadOperation
+    public class AssetBundleLoadLevelOperation : AsyncLoadOperation
     {
         protected string AssetBundleName;
         protected string DownloadingError;
@@ -94,9 +101,14 @@ namespace Assets.Scripts.AssetBundles
         {
             return Request != null ? Request.progress : 0f;
         }
+
+        public override string GetError()
+        {
+            return DownloadingError;
+        }
     }
 
-    public abstract class AssetBundleLoadAssetOperation : AssetBundleLoadOperation
+    public abstract class AssetBundleLoadAssetOperation : AsyncLoadOperation
     {
         public abstract T GetAsset<T>() where T : Object;
     }
@@ -128,6 +140,11 @@ namespace Assets.Scripts.AssetBundles
         public override float GetProgress()
         {
             return 1f;
+        }
+
+        public override string GetError()
+        {
+            return "";
         }
     }
 
@@ -174,7 +191,8 @@ namespace Assets.Scripts.AssetBundles
             // m_DownloadingError might come from the dependency downloading.
             if (Request == null && DownloadingError != null)
             {
-                Debug.LogError(DownloadingError);
+                var message = string.Format("AssetBundle:{0} Asset:{1} error:{2}", AssetBundleName, AssetName, DownloadingError);
+                Debug.LogError(message);
                 return true;
             }
 
@@ -184,6 +202,11 @@ namespace Assets.Scripts.AssetBundles
         public override float GetProgress()
         {
             return Request != null ? Request.progress : 0f;
+        }
+
+        public override string GetError()
+        {
+            return DownloadingError;
         }
     }
 

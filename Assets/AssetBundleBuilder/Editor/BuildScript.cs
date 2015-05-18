@@ -1,13 +1,18 @@
 ﻿using System.IO;
+using Assets.Scripts.AssetBundles;
 using UnityEditor;
 
 public class BuildScript
 {
     const string AssetBundlesOutputPath = "AssetBundles";
+
     private static readonly BuildTarget[] BuildTargets =
     {
         BuildTarget.iOS, BuildTarget.Android
     };
+
+    private const BuildAssetBundleOptions BuildOptions = 
+        BuildAssetBundleOptions.DeterministicAssetBundle | BuildAssetBundleOptions.ForceRebuildAssetBundle;
 
     public static void BuildAssetBundles()
     {
@@ -17,10 +22,11 @@ public class BuildScript
                 AssetBundleUtil.GetPlatformFolderForAssetBundles(buildTarget));
 
             if (!Directory.Exists(outputPath))
+            {
                 Directory.CreateDirectory(outputPath);
+            }
 
-            BuildPipeline.BuildAssetBundles(outputPath,
-                BuildAssetBundleOptions.None, buildTarget);
+            BuildPipeline.BuildAssetBundles(outputPath, BuildOptions, buildTarget);
         }
     }
 }

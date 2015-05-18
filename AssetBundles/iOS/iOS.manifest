@@ -1,9 +1,0 @@
-ManifestFileVersion: 0
-AssetBundleManifest:
-  AssetBundleInfos:
-    Info_0:
-      Name: bgm_02
-      Dependencies: {}
-    Info_1:
-      Name: bgm_01
-      Dependencies: {}

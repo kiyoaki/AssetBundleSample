@@ -1,11 +1,11 @@
 ﻿using UnityEditor;
 
 [CustomEditor(typeof(AssetBundleClientSettings))]
-public class AssetBundleBuildSettingsEditor : SettingsEditorBase<AssetBundleClientSettings>
+public class AssetBundleClientSettingsEditor : SettingsEditorBase<AssetBundleClientSettings>
 {
     protected const string SettingsFileName = "AssetBundleClientSettings";
 
-    [MenuItem("Edit/Show AssetBundle Build Settings")]
+    [MenuItem("AssetBundles/Show AssetBundleClientSettings")]
     public static void ShowSettings()
     {
         var settingsInstance = Load(SettingsFileName) ?? CreateNewAsset(SettingsFileName);
