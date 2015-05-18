@@ -3,7 +3,7 @@ AssetBundleBuilder
 AssetBundleBuilderはUnity3DのAssetBundleを作成するためのライブラリです。
 
 ## Unityのバージョン
-5.0.0f4
+5.0.1p1
 
 ## ビルド方法
 
