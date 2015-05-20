@@ -2,6 +2,7 @@
 [Tt]emp/
 [Oo]bj/
 [Ll]ibrary/
+[Pp]ackages/
 
 *.user
 *.user.meta
@@ -24,3 +25,5 @@ sysinfo.txt
 
 # should not be ignored
 !*.dll
+!Batch.sln
+
