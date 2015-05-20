@@ -5,7 +5,7 @@ public class AssetBundleClientSettingsEditor : SettingsEditorBase<AssetBundleCli
 {
     protected const string SettingsFileName = "AssetBundleClientSettings";
 
-    [MenuItem("AssetBundles/Show AssetBundleClientSettings")]
+    [MenuItem("AssetBundles/Show Settings")]
     public static void ShowSettings()
     {
         var settingsInstance = Load(SettingsFileName) ?? CreateNewAsset(SettingsFileName);
