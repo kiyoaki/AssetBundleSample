@@ -38,7 +38,7 @@ public class AssetBundleSpriteImage : MonoBehaviour
 
         if (string.IsNullOrEmpty(AssetBundlePath))
         {
-            yield break;
+            yield return null;
         }
 
         Sprite sprite;

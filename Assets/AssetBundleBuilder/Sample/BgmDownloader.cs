@@ -39,7 +39,7 @@ public class BgmDownloader : MonoBehaviour, IProgress<float>
                 .Subscribe(clip =>
                 {
                     DownloadProgresSlider.value = 1;
-                    DonwloadStatusText.text = "ダウンロード完了";
+                    DonwloadStatusText.text = "BGMダウンロード完了";
 
                     BgmAudioSource.clip = clip;
                     BgmAudioSource.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGM").FirstOrDefault();
@@ -52,6 +52,6 @@ public class BgmDownloader : MonoBehaviour, IProgress<float>
     public void Report(float value)
     {
         DownloadProgresSlider.value = value;
-        DonwloadStatusText.text = "ダウンロード中... " + value.ToString("0%");
+        DonwloadStatusText.text = "BGMダウンロード中... " + value.ToString("0%");
     }
 }
