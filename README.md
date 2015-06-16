@@ -9,16 +9,20 @@
 
 - Unityエディタのメニューから「AssetBundles」→「Show Settings」
 
+### サンプル
+
+- Assets/AssetBundleBuilder/Sample/Sample.unity
+
 ### 使用したもの
 
 #### UniRx  
 
-https://github.com/neuecc/UniRx
+- https://github.com/neuecc/UniRx
 
 #### 魔王魂
 
-http://maoudamashii.jokersounds.com/
+- http://maoudamashii.jokersounds.com/
 
 #### モンスターのイラストをフリー素材として提供しているサイト
 
-http://members.jcom.home.ne.jp/hide.mats/
+- http://members.jcom.home.ne.jp/hide.mats/
