@@ -26,3 +26,9 @@
 #### モンスターのイラストをフリー素材として提供しているサイト
 
 - http://members.jcom.home.ne.jp/hide.mats/
+
+### おまけ
+
+Azureストレージへアップロードするバッチ処理
+
+- UploadToAzureStorage
