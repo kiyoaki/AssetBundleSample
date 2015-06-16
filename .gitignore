@@ -27,3 +27,6 @@ sysinfo.txt
 !*.dll
 !Batch.sln
 
+# UnityVS
+Assets/UnityVS/
+Assets/UnityVS.meta
