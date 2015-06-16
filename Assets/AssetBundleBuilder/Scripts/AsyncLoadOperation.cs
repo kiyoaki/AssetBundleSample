@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Assets.Scripts.AssetBundles
+namespace AssetBundleBuilder
 {
     public abstract class AsyncLoadOperation : IEnumerator
     {

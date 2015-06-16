@@ -1,29 +1,31 @@
 ﻿using System.Collections;
-using Assets.Scripts.AssetBundles;
+using System.Collections.Generic;
+using AssetBundleBuilder;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class AssetBundleSpriteImage : MonoBehaviour
 {
+    private static readonly Dictionary<Tuple<string, string>, Sprite> Loaded =
+        new Dictionary<Tuple<string, string>, Sprite>();
+
     public string AssetBundlePath;
     public string AssetName;
-
-    public float Progress { get; private set; }
 
     public bool IsDone { get; private set; }
 
     private Image _targetImage;
 
-    IEnumerator Start()
+    void Awake()
     {
         _targetImage = GetComponent<Image>();
+        _targetImage.enabled = false;
+    }
 
-        if (string.IsNullOrEmpty(AssetBundlePath))
-        {
-            yield break;
-        }
-
+    IEnumerator Start()
+    {
         if (!Caching.enabled)
         {
             yield break;
@@ -34,35 +36,35 @@ public class AssetBundleSpriteImage : MonoBehaviour
             yield return null;
         }
 
-        //Initializeが完了するまで待ち
-        yield return StartCoroutine(AssetBundleManager.Initialize());
-
-        StartCoroutine(SetSprite(AssetBundlePath, AssetName));
-    }
-
-    public void ChangeSprite(string assetBundlePath, string assetName)
-    {
-        StartCoroutine(SetSprite(AssetBundlePath, AssetName));
-    }
-
-    IEnumerator SetSprite(string assetBundlePath, string assetName)
-    {
-        var request = AssetBundleManager.LoadAssetAsync(assetBundlePath, assetName, typeof(Sprite));
-        if (request == null)
-            yield break;
-
-        while (!request.IsDone())
+        if (string.IsNullOrEmpty(AssetBundlePath))
         {
-            Progress = request.GetProgress();
-            yield return null;
+            yield break;
         }
-        Progress = request.GetProgress();
 
-        _targetImage.sprite = request.GetAsset<Sprite>();
+        Sprite sprite;
+        var key = Tuple.Create(AssetBundlePath, AssetName);
+        if (Loaded.TryGetValue(key, out sprite))
+        {
+            _targetImage.sprite = sprite;
+            _targetImage.enabled = true;
+            IsDone = true;
+            yield break;
+        }
 
-        IsDone = true;
+        ObservableAssetBundle.Initialize()
+            .Subscribe(_ => ObservableAssetBundle.LoadAssetBundle<Sprite>(AssetBundlePath, AssetName)
+                .Subscribe(x =>
+                {
+                    _targetImage.sprite = x;
+                    _targetImage.enabled = true;
+                    IsDone = true;
+                    Loaded[key] = x;
+                }));
+    }
 
-        //展開されたアセットバンドルはメモリを食うので開放
-        AssetBundleManager.UnloadAssetBundle(assetBundlePath);
+    void OnDestroy()
+    {
+        AssetBundleManager.UnloadAssetBundle(AssetBundlePath);
+        Loaded.Clear();
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
-namespace Assets.Scripts.AssetBundles
+namespace AssetBundleBuilder
 {
     public class LoadedAssetBundle
     {
@@ -19,11 +20,6 @@ namespace Assets.Scripts.AssetBundles
     // Class takes care of loading assetBundle and its dependencies automatically, loading variants automatically.
     public class AssetBundleManager : MonoBehaviour
     {
-        void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-
         static string[] _variants = { };
         static AssetBundleManifest _assetBundleManifest;
 
@@ -160,6 +156,7 @@ namespace Assets.Scripts.AssetBundles
                 return true;
 
             var url = BaseDownloadingUrl.UrlCombine(assetBundleName);
+
             if (isLoadingAssetBundleManifest)
             {
                 url = url.AddQueryParameter(new Dictionary<string, string>
@@ -169,7 +166,7 @@ namespace Assets.Scripts.AssetBundles
             }
 
             // For manifest assetbundle, always download it as we don't have hash for it.
-            var download = isLoadingAssetBundleManifest || !Caching.ready ? new WWW(url) : WWW.LoadFromCacheOrDownload(url, _assetBundleManifest.GetAssetBundleHash(assetBundleName), 0);
+            var download = isLoadingAssetBundleManifest || !Caching.ready ? new WWW(url) : WWW.LoadFromCacheOrDownload(url, _assetBundleManifest.GetAssetBundleHash(assetBundleName));
 
             DownloadingWWWs.Add(assetBundleName, download);
 
@@ -202,6 +199,11 @@ namespace Assets.Scripts.AssetBundles
         // Unload assetbundle and its dependencies.
         static public void UnloadAssetBundle(string assetBundleName)
         {
+            if (string.IsNullOrEmpty(assetBundleName))
+            {
+                return;
+            }
+
             //Debug.Log(m_LoadedAssetBundles.Count + " assetbundle(s) in memory before unloading " + assetBundleName);
 
             UnloadAssetBundleInternal(assetBundleName);
@@ -238,6 +240,11 @@ namespace Assets.Scripts.AssetBundles
                 LoadedAssetBundles.Remove(assetBundleName);
                 //Debug.Log("AssetBundle " + assetBundleName + " has been unloaded successfully");
             }
+        }
+
+        void Start()
+        {
+            DontDestroyOnLoad(gameObject);
         }
 
         void Update()
@@ -329,5 +336,16 @@ namespace Assets.Scripts.AssetBundles
 
             return operation;
         }
-    }
+
+        static public IObservable<Unit> LoadLevelAdditiveAsObservable(string assetBundleName, string levelName)
+        {
+            LoadAssetBundle(assetBundleName);
+            var operation = new AssetBundleLoadLevelOperation(assetBundleName, levelName, true);
+
+            InProgressOperations.Add(operation);
+
+            return operation.ToObservable();
+        }
+
+    } // End of AssetBundleManager.
 }

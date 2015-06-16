@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using AssetBundleBuilder;
+using UnityEditor;
 
 [CustomEditor(typeof(AssetBundleClientSettings))]
 public class AssetBundleClientSettingsEditor : SettingsEditorBase<AssetBundleClientSettings>

@@ -3,7 +3,7 @@
 using UnityEditor;
 #endif
 
-namespace Assets.Scripts.AssetBundles
+namespace AssetBundleBuilder
 {
     public static class AssetBundleUtil
     {

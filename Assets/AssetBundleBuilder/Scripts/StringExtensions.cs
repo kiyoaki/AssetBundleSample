@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Scripts.AssetBundles
+namespace AssetBundleBuilder
 {
     public static class StringExtensions
     {

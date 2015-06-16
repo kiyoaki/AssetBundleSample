@@ -1,11 +1,12 @@
-﻿using System.Linq;
-using Assets.Scripts.AssetBundles;
+﻿using System.Collections;
+using System.Linq;
+using AssetBundleBuilder;
+using UniRx;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class BgmDownloader : MonoBehaviour
+public class BgmDownloader : MonoBehaviour, IProgress<float>
 {
     public AudioMixer Mixer;
     public AudioSource BgmAudioSource;
@@ -13,7 +14,7 @@ public class BgmDownloader : MonoBehaviour
     public Text DonwloadStatusText;
 
     private const long RequiredDiskSpaceMegabyte = 100;
-    private const float RequiredDiskSpaceByte = RequiredDiskSpaceMegabyte * 1024f * 1024f;
+    private const long RequiredDiskSpaceByte = RequiredDiskSpaceMegabyte * 1024 * 1024;
     private const string AssetBundlePath = "bgm/orchestra12";
     private const string AssetName = "bgm_maoudamashii_orchestra12";
 
@@ -25,41 +26,32 @@ public class BgmDownloader : MonoBehaviour
             yield break;
         }
 
-        if (Caching.maximumAvailableDiskSpace < RequiredDiskSpaceByte)
-        {
-            var needSpaceByte = RequiredDiskSpaceByte - Caching.maximumAvailableDiskSpace;
-            Debug.LogError(string.Format("ディスクの空き容量が {0}MB 足りません。",
-                Mathf.CeilToInt(needSpaceByte / 1024f / 1024f)));
-            yield break;
-        }
-
         while (!Caching.ready)
         {
             yield return null;
         }
 
-        yield return StartCoroutine(AssetBundleManager.Initialize());
-
-        var request = AssetBundleManager.LoadAssetAsync(AssetBundlePath, AssetName, typeof(Object));
-        if (request == null)
-            yield break;
-
+        Caching.maximumAvailableDiskSpace = RequiredDiskSpaceByte;
         DownloadProgresSlider.maxValue = 1;
 
-        while (!request.IsDone())
-        {
-            DownloadProgresSlider.value = request.GetProgress();
-            DonwloadStatusText.text = "ダウンロード中... " + (DownloadProgresSlider.value).ToString("0%");
-            yield return null;
-        }
+        ObservableAssetBundle.Initialize()
+            .Subscribe(_ => ObservableAssetBundle.LoadAssetBundle<AudioClip>(AssetBundlePath, AssetName, this)
+                .Subscribe(clip =>
+                {
+                    DownloadProgresSlider.value = 1;
+                    DonwloadStatusText.text = "ダウンロード完了";
 
-        DownloadProgresSlider.value = 1;
-        DonwloadStatusText.text = "ダウンロード完了";
+                    BgmAudioSource.clip = clip;
+                    BgmAudioSource.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGM").FirstOrDefault();
+                    BgmAudioSource.Play();
 
-        BgmAudioSource.clip = request.GetAsset<AudioClip>();
-        BgmAudioSource.outputAudioMixerGroup = Mixer.FindMatchingGroups("BGM").FirstOrDefault();
-        BgmAudioSource.Play();
+                    AssetBundleManager.UnloadAssetBundle(AssetBundlePath);
+                }));
+    }
 
-        AssetBundleManager.UnloadAssetBundle(AssetBundlePath);
+    public void Report(float value)
+    {
+        DownloadProgresSlider.value = value;
+        DonwloadStatusText.text = "ダウンロード中... " + value.ToString("0%");
     }
 }

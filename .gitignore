@@ -30,3 +30,6 @@ sysinfo.txt
 # UnityVS
 Assets/UnityVS/
 Assets/UnityVS.meta
+
+# Output directory for AssetBundles
+AssetBundles/

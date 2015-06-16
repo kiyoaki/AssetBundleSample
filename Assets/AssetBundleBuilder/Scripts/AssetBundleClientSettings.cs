@@ -1,38 +1,38 @@
-﻿using Assets.Scripts.AssetBundles;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class AssetBundleClientSettings : ScriptableObject
+namespace AssetBundleBuilder
 {
-    public string BaseUrl;
-
-    public static string BuildAssetBundleUrl(string path)
+    public class AssetBundleClientSettings : ScriptableObject
     {
-        return Instance.BaseUrl.UrlCombine(path);
-    }
+        public string BaseUrl;
 
-    #region singleton
-    private static AssetBundleClientSettings _instance;
-    private static readonly object LockObject = new object();
-
-    public static AssetBundleClientSettings Instance
-    {
-        get
+        public static string BuildAssetBundleUrl(string path)
         {
-            if (_instance == null)
+            return Instance.BaseUrl.UrlCombine(path);
+        }
+
+        #region singleton
+        private static AssetBundleClientSettings _instance;
+        private static readonly object LockObject = new object();
+
+        public static AssetBundleClientSettings Instance
+        {
+            get
             {
-                lock (LockObject)
+                if (_instance == null)
                 {
-                    if (_instance == null)
+                    lock (LockObject)
                     {
-                        _instance = (AssetBundleClientSettings)Resources.Load(
-                            "AssetBundleClientSettings");
+                        if (_instance == null)
+                        {
+                            _instance = (AssetBundleClientSettings)Resources.Load(
+                                "AssetBundleClientSettings");
+                        }
                     }
                 }
+                return _instance;
             }
-            return _instance;
         }
+        #endregion
     }
-    #endregion
-
-
 }
